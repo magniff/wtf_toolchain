@@ -1,14 +1,14 @@
 import pytest
-from lib import parse
+from lib.compiler import build_token_generator, ProgramNode, p_program
 
 
-CASES = (
-    ('>>>>+-', ('>>>>+-', {})),
-    ('++[-->]+', ('++[-->]+', {2: 7, 6: 2})),
-)
+CASES = [
+    '+++++++++++',
+    '+++--......-[...--[><>>,,<<-]]++',
+]
 
 
-@pytest.mark.parametrize('code,parsed', CASES)
-def test_parser(code, parsed):
-    assert parse(code) == parsed
+@pytest.mark.parametrize('code', CASES)
+def test_parser(code):
+    assert p_program.parse(tuple(build_token_generator(code))).to_bf_code() == code
 
