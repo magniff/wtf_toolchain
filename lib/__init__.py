@@ -1,54 +1,37 @@
-from collections import namedtuple
+from .compiler import p_program, build_token_generator
+from .compiler.ast import Inc, Dec, Left, Right, Output, LoopNode
 
 
-BF_INSTRUCTIONS = "+-[].,<>"
+def interprete_worker(node, pc, dp, memory):
+    if isinstance(node, Left):
+        dp -= node.repeat
+    elif isinstance(node, Right):
+        dp += node.repeat
+    elif isinstance(node, Output):
+        for _ in range(node.repeat):
+            print(chr(memory[dp]), end='')
+    elif isinstance(node, LoopNode):
+        while True:
+            if memory[dp] == 0:
+                return pc, dp
+            for inner_node in node.contains:
+                pc, dp = interprete_worker(inner_node, pc, dp, memory)
+            if memory[dp] == 0:
+                return pc, dp
+    elif isinstance(node, Inc):
+        memory[dp] += node.repeat
+    elif isinstance(node, Dec):
+        memory[dp] -= node.repeat
 
-
-def parse(source):
-    stack = list()
-    jumps = dict()
-    code = ''.join(filter(lambda value: value in BF_INSTRUCTIONS, source))
-
-    for counter, instruction in enumerate(code):
-        if instruction == '[':
-            stack.append(counter)
-        elif instruction == ']':
-            loopback_address = stack.pop()
-            jumps[counter] = loopback_address
-            jumps[loopback_address] = counter + 1
-
-    for counter, instruction in enumerate(code):
-        yield (instruction, jumps.get(counter))
+    return pc, dp
 
 
 def interprete(code):
+    program_counter = 0
+    data_pointer = 0
     memory = [0] * 30000
-    current_cell = 0
-    current_instruction = 0
-    clean_code = tuple(parse(code))
-    program_len = len(clean_code)
-    while True:
-        if current_instruction > program_len - 1:
-            break
-        instruction, link = clean_code[current_instruction]
-        if instruction == '<':
-            current_cell -= 1
-        elif instruction == '>':
-            current_cell += 1
-        elif instruction == '.':
-            print(chr(memory[current_cell]), end='')
-        elif instruction == '[':
-            if memory[current_cell] == 0:
-                current_instruction = link
-                continue
-        elif instruction == ']':
-            if memory[current_cell] != 0:
-                current_instruction = link
-                continue
-        elif instruction == '+':
-            memory[current_cell] += 1
-        elif instruction == '-':
-            memory[current_cell] -= 1
-
-        current_instruction += 1
+    for node in p_program.parse(tuple(build_token_generator(code))).contains:
+        program_counter, data_pointer = interprete_worker(
+            node=node, pc=program_counter, dp=data_pointer, memory=memory
+        )
 
