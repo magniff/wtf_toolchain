@@ -92,7 +92,6 @@ def interprete(input_bytes):
         elif opcode == TERMINATE:
             break
 
-
     return 0
 
 

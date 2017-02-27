@@ -10,16 +10,19 @@ classifiers = [
 
 
 setuptools.setup(
-    name='bfpypy',
-    description='description',
+    name='wtf_toolchain',
+    description='JIT powered BF interpreter and custom compiler.',
     version='0.1.0',
     license='MIT license',
     platforms=['unix', 'linux', 'osx', 'win32'],
-    keywords=[],
+    keywords=['brainfuck', 'jit'],
     author='magniff',
-    url='https://github.com/magniff/bfpypy',
+    url='https://github.com/magniff/wtf_toolchain',
     classifiers=classifiers,
     packages=setuptools.find_packages(),
+    install_requires=[
+        'watch', 'funcparserlib', 'pytest'
+    ],
     entry_points={
         'console_scripts': [
             'wtf_compile=bin.wtf_compile:main',
