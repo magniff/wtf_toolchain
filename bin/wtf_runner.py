@@ -15,7 +15,7 @@ TERMINATE = 255
 
 
 jitdriver = JitDriver(
-    greens=['program_counter'],
+    greens=['program_counter', 'input_bytes'],
     reds=['data_pointer', 'memory']
 )
 
@@ -36,7 +36,7 @@ def interprete(input_bytes):
 
     while 1:
         jitdriver.jit_merge_point(
-            program_counter=program_counter,
+            program_counter=program_counter, input_bytes=input_bytes,
             data_pointer=data_pointer, memory=memory
         )
         opcode = input_bytes[program_counter]
@@ -73,7 +73,7 @@ def interprete(input_bytes):
             else:
                 program_counter -= LONG_OPCODE + argument
                 jitdriver.can_enter_jit(
-                    program_counter=program_counter,
+                    program_counter=program_counter, input_bytes=input_bytes,
                     data_pointer=data_pointer, memory=memory
                  )
 
@@ -96,6 +96,12 @@ def interprete(input_bytes):
 
 
 def main(argv):
+    if len(argv) != 2:
+        print("This tool takes exactly one arguments - filename.")
+        return 1
+    if not os.path.exists(argv[1]):
+        print("File %s not found." % argv[1])
+        return 1
     with open(argv[1], 'rb') as data:
         code = data.read()
     return interprete(bytearray(code))
