@@ -15,8 +15,8 @@ TERMINATE = 255
 
 
 jitdriver = JitDriver(
-    greens=['input_bytes'],
-    reds=['program_counter', 'data_pointer', 'memory']
+    greens=['program_counter'],
+    reds=['data_pointer', 'memory']
 )
 
 
@@ -28,17 +28,17 @@ def jitpolicy(driver):
 SHORT_OPCODE = 1
 LONG_OPCODE = 3
 
+
 def interprete(input_bytes):
     program_counter = 0
     data_pointer = 0
     memory = [0] * 30000
 
     while 1:
-#        jitdriver.jit_merge_point(
-#            input_bytes=input_bytes, memory=memory,
-#            program_counter=program_counter, data_pointer=data_pointer
-#        )
-
+        jitdriver.jit_merge_point(
+            program_counter=program_counter,
+            data_pointer=data_pointer, memory=memory
+        )
         opcode = input_bytes[program_counter]
         argument = (
             input_bytes[program_counter+1] * 256 +
@@ -53,8 +53,12 @@ def interprete(input_bytes):
             data_pointer += argument
             program_counter += LONG_OPCODE
 
+        elif opcode == READ:
+            memory[data_pointer] = ord(os.read(0, 1)[0])
+            program_counter += SHORT_OPCODE
+
         elif opcode == WRITE:
-            os.write(1, chr(memory[data_pointer]))
+            os.write(1, str(chr(memory[data_pointer])))
             program_counter += SHORT_OPCODE
 
         elif opcode == SETUP_LOOP:
@@ -68,6 +72,10 @@ def interprete(input_bytes):
                 program_counter += LONG_OPCODE
             else:
                 program_counter -= LONG_OPCODE + argument
+                jitdriver.can_enter_jit(
+                    program_counter=program_counter,
+                    data_pointer=data_pointer, memory=memory
+                 )
 
         elif opcode == INC:
             memory[data_pointer] += argument
@@ -83,6 +91,7 @@ def interprete(input_bytes):
 
         elif opcode == TERMINATE:
             break
+
 
     return 0
 

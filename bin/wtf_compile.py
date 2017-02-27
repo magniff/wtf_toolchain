@@ -23,6 +23,5 @@ def main(input, output):
         tuple(tokenizer.build_token_generator(input.read()))
     )
     opt_ast = optimizer.optimize(ast)
-    result = bytes(generator.visit(opt_ast))
     output.write(bytes(generator.visit(opt_ast)))
 

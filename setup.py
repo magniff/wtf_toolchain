@@ -22,10 +22,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     entry_points={
         'console_scripts': [
-            'wtf=bin.wtf:main',
-            'wtf_capture_specification=bin.wtf_capture_specification:main',
             'wtf_compile=bin.wtf_compile:main',
-            'wtf_build_vm=bin.wtf_build_vm:main',
         ]
     },
     zip_safe=False,
