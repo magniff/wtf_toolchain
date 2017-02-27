@@ -1,5 +1,5 @@
 from .compiler import p_program, build_token_generator
-from .compiler.ast import Inc, Dec, Left, Right, Output, LoopNode
+from .ast import Inc, Dec, Left, Right, Output, LoopNode
 
 
 def interprete_worker(node, pc, dp, memory):
