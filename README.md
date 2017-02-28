@@ -1,12 +1,9 @@
 # Ohhhh, brainfuck again, srsly?
 ## Why?
-This is my attempt to build JIT powered bf interpreter using `RPython` toolchain. In order to make it even faster I have build a simple compiler, that generates flat and slightly optimized version of original `*.b` program.
-
-## Hmm..
-Toolchain consists of two parts - compiler written in python and JIT powered VM, written in RPython.
+This is my attempt to build a JIT powered BF interpreter using `RPython` toolchain. In order to make it even faster I have build a simple compiler, that generates flat and slightly optimized version of original `*.b` program.
 
 ### Preparation
-First build actual VM, pypy toolchain is required.
+First things first, start with building the VM itself, `PyPy` toolchain is required.
 ```bash
 python pypy3-v5.5.0-src/rpython/bin/rpython -Ojit bin/wtf_runner.py 
 ```
