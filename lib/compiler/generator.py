@@ -3,22 +3,10 @@ from collections.abc import Iterable
 from itertools import chain
 import struct
 
-from lib.ast import LoopNode
+from lib.ast import Loop
 from . import opcodes
 
 visitors = sys.modules[__name__]
-
-
-SETUP_LOOP = 0
-END_LOOP = 1
-INC = 2
-DEC = 3
-RSHIFT = 4
-LSHIFT = 5
-WRITE = 6
-READ = 7
-DROP = 8
-TERMINATE = 255
 
 
 def visit(node):
@@ -29,6 +17,15 @@ def visit(node):
 
 def visit_Drop(node):
     yield opcodes.DROP
+
+
+def visit_Add(node):
+    yield opcodes.ADD
+    if node.shift > 0:
+        yield 0
+    else:
+        yield 1
+    yield abs(node.shift)
 
 
 def visit_Inc(node):
@@ -59,7 +56,7 @@ def visit_Right(node):
     yield from struct.pack('>h', node.repeat)
 
 
-def visit_LoopNode(node):
+def visit_Loop(node):
     all_insides = tuple(chain(*(visit(subnode) for subnode in node.contains)))
     yield opcodes.SETUP_LOOP
     yield from struct.pack('>h', len(all_insides))
@@ -68,7 +65,7 @@ def visit_LoopNode(node):
     yield from struct.pack('>h', len(all_insides))
 
 
-def visit_ProgramNode(node):
+def visit_Program(node):
     for subnode in node.contains:
         yield from visit(subnode)
     yield opcodes.TERMINATE

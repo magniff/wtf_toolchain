@@ -11,6 +11,8 @@ LSHIFT = 5
 WRITE = 6
 READ = 7
 DROP = 8
+ADD = 9
+
 TERMINATE = 255
 
 
@@ -88,6 +90,15 @@ def interprete(input_bytes):
         elif opcode == DROP:
             memory[data_pointer] = 0
             program_counter += SHORT_OPCODE
+
+        elif opcode == ADD:
+            if input_bytes[program_counter+1] == 0:
+                shift = input_bytes[program_counter+2]
+            else:
+                shift = -input_bytes[program_counter+2]
+            memory[data_pointer+shift] += memory[data_pointer]
+            memory[data_pointer] = 0
+            program_counter += LONG_OPCODE
 
         elif opcode == TERMINATE:
             break

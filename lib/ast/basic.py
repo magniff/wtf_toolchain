@@ -6,8 +6,11 @@ class BaseASTNode(watch.WatchMe):
         raise NotImplementedError()
 
 
-class SimpleInstructionNode(BaseASTNode):
+class SimpleInstruction(BaseASTNode):
     repeat = watch.builtins.InstanceOf(int)
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self.repeat == other.repeat
 
     def to_bf_code(self):
         return self.bf_instruction * self.repeat
@@ -16,32 +19,35 @@ class SimpleInstructionNode(BaseASTNode):
         self.repeat = repeat
 
 
-class Inc(SimpleInstructionNode):
+class Inc(SimpleInstruction):
     bf_instruction = '+'
 
 
-class Dec(SimpleInstructionNode):
+class Dec(SimpleInstruction):
     bf_instruction = '-'
 
 
-class Right(SimpleInstructionNode):
+class Right(SimpleInstruction):
     bf_instruction = '>'
 
 
-class Left(SimpleInstructionNode):
+class Left(SimpleInstruction):
     bf_instruction = '<'
 
 
-class Input(SimpleInstructionNode):
+class Input(SimpleInstruction):
     bf_instruction = ','
 
 
-class Output(SimpleInstructionNode):
+class Output(SimpleInstruction):
     bf_instruction = '.'
 
 
-class LoopNode(BaseASTNode):
+class Loop(BaseASTNode):
     contains = watch.ArrayOf(watch.builtins.InstanceOf(BaseASTNode))
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self.contains == other.contains
 
     def to_bf_code(self):
         return '[%s]' % ''.join(node.to_bf_code() for node in self.contains)
@@ -50,7 +56,7 @@ class LoopNode(BaseASTNode):
         self.contains = contains
 
 
-class ProgramNode(LoopNode):
+class Program(Loop):
     def to_bf_code(self):
         return ''.join(node.to_bf_code() for node in self.contains)
 

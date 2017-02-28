@@ -1,7 +1,7 @@
 import os
 import pytest
 from lib.compiler import build_token_generator, p_program
-from lib.ast import ProgramNode
+from lib.ast import Program
 from lib.compiler.tokenizer import BF_INSTRUCTIONS
 
 

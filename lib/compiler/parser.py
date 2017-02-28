@@ -25,14 +25,14 @@ p_expression = p.forward_decl()
 p_loop_expression.define(
     (p.skip(p.a(t.t_loop_start())) + p.maybe(p_expression) + p.skip(p.a(t.t_loop_end()))) >>
     (
-        lambda contains: ast.LoopNode(
-            contains=(contains if contains else tuple())
+        lambda contains: ast.Loop(
+            contains=(contains if contains else list())
         )
     )
 )
 
 p_expression.define(p.oneplus(p_simple_expression | p_loop_expression))
 p_program = (
-    p_expression >> (lambda contains: ast.ProgramNode(contains=contains))
+    p_expression >> (lambda contains: ast.Program(contains=contains))
 )
 
