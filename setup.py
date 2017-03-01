@@ -21,7 +21,7 @@ setuptools.setup(
     classifiers=classifiers,
     packages=setuptools.find_packages(),
     install_requires=[
-        'watch', 'funcparserlib', 'pytest'
+        'watch', 'funcparserlib', 'pytest', 'click',
     ],
     entry_points={
         'console_scripts': [

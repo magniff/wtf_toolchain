@@ -8,7 +8,7 @@ from lib.compiler import generator, tokenizer, parser, optimizer
 
 @click.command(
     context_settings=dict(help_option_names=['-h', '--help']),
-    help=('Pretty straight forward demultiplexing algorithm.')
+    help='WTF compiler.'
 )
 @click.option(
     '-i', '--input', required=True,
