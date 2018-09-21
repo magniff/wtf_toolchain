@@ -20,3 +20,5 @@ runall.sh
 MANIFEST
 *.bin
 *-c
+jitted
+
