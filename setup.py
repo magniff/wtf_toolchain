@@ -11,10 +11,10 @@ classifiers = [
 
 setuptools.setup(
     name='wtf_toolchain',
-    description='JIT powered BF interpreter and custom compiler.',
+    description='JIT powered BF interpreter and a custom compiler.',
     version='0.1.0',
     license='MIT license',
-    platforms=['unix', 'linux', 'osx', 'win32'],
+    platforms=['unix', 'linux'],
     keywords=['brainfuck', 'jit'],
     author='magniff',
     url='https://github.com/magniff/wtf_toolchain',
@@ -30,3 +30,4 @@ setuptools.setup(
     },
     zip_safe=False,
 )
+
