@@ -25,3 +25,7 @@ def main(input, output):
     opt_ast = optimizer.optimize(ast)
     output.write(bytes(generator.visit(opt_ast)))
 
+
+if __name__ == "__main__":
+    main()
+

@@ -1,4 +1,5 @@
 import watch
+from watch.builtins import InstanceOf, Container
 
 
 class BaseASTNode(watch.WatchMe):
@@ -7,7 +8,7 @@ class BaseASTNode(watch.WatchMe):
 
 
 class SimpleInstruction(BaseASTNode):
-    repeat = watch.builtins.InstanceOf(int)
+    repeat = InstanceOf(int)
 
     def __eq__(self, other):
         return type(self) == type(other) and self.repeat == other.repeat
@@ -44,7 +45,7 @@ class Output(SimpleInstruction):
 
 
 class Loop(BaseASTNode):
-    contains = watch.ArrayOf(watch.builtins.InstanceOf(BaseASTNode))
+    contains = Container(InstanceOf(BaseASTNode))
 
     def __eq__(self, other):
         return type(self) == type(other) and self.contains == other.contains

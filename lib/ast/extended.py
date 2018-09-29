@@ -1,4 +1,4 @@
-import watch
+from watch.builtins import InstanceOf
 from . basic import BaseASTNode
 
 
@@ -7,7 +7,7 @@ class Drop(BaseASTNode):
 
 
 class Add(BaseASTNode):
-    shift = watch.builtins.InstanceOf(int)
+    shift = InstanceOf(int)
 
     def __init__(self, shift):
         self.shift = shift

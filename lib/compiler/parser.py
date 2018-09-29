@@ -21,9 +21,13 @@ p_output= build_simple_parser(token_name='output', ast_class=ast.Output)
 p_simple_expression = p_dec | p_inc | p_right | p_left | p_input | p_output
 
 p_loop_expression = p.forward_decl()
-p_expression = p.forward_decl() 
+p_expression = p.forward_decl()
 p_loop_expression.define(
-    (p.skip(p.a(t.t_loop_start())) + p.maybe(p_expression) + p.skip(p.a(t.t_loop_end()))) >>
+    (
+        p.skip(p.a(t.t_loop_start())) +
+        p.maybe(p_expression) +
+        p.skip(p.a(t.t_loop_end()))
+    ) >>
     (
         lambda contains: ast.Loop(
             contains=(contains if contains else list())

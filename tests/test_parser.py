@@ -7,6 +7,8 @@ from lib.compiler.tokenizer import BF_INSTRUCTIONS
 
 
 CODE = list()
+
+
 ASSETS_PREFIX = 'tests/assets/'
 for root, dirs, files in os.walk(ASSETS_PREFIX):
     for filename in files:

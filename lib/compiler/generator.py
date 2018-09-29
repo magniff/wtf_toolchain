@@ -57,7 +57,7 @@ def visit_Right(node):
 
 
 def visit_Loop(node):
-    all_insides = tuple(chain(*(visit(subnode) for subnode in node.contains)))
+    all_insides = bytes(chain(*(visit(subnode) for subnode in node.contains)))
     yield opcodes.SETUP_LOOP
     yield from struct.pack('>h', len(all_insides))
     yield from all_insides
